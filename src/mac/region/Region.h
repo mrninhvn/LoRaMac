@@ -59,10 +59,13 @@ extern "C"
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "utilities.h"
+#include "../boards/utilities.h"
 #include "LoRaMac.h"
-#include "timer.h"
+#include "../system/timer.h"
 #include "RegionCommon.h"
+
+#define REGION_AS923
+#define USE_NVM         false
 
 /*!
  * Macro to compute bit of a channel index.

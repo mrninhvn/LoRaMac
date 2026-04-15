@@ -28,7 +28,7 @@
  *
  * \author    Daniel Jaeckle ( STACKFORCE )
 */
-#include "radio.h"
+#include "../radio/radio.h"
 #include "RegionCommon.h"
 #include "RegionAS923.h"
 
@@ -278,6 +278,7 @@ PhyParam_t RegionAS923GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_NEXT_LOWER_TX_DR:
         {
+            #if USE_NVM
             RegionCommonGetNextLowerTxDrParams_t nextLowerTxDrParams =
             {
                 .CurrentDr = getPhy->Datarate,
@@ -288,6 +289,7 @@ PhyParam_t RegionAS923GetPhyParam( GetPhyParams_t* getPhy )
                 .Channels = RegionNvmGroup2->Channels,
             };
             phyParam.Value = RegionCommonGetNextLowerTxDr( &nextLowerTxDrParams );
+            #endif
             break;
         }
         case PHY_MAX_TX_POWER:
@@ -374,12 +376,16 @@ PhyParam_t RegionAS923GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_CHANNELS_MASK:
         {
+            #if USE_NVM
             phyParam.ChannelsMask = RegionNvmGroup2->ChannelsMask;
+            #endif
             break;
         }
         case PHY_CHANNELS_DEFAULT_MASK:
         {
+            #if USE_NVM
             phyParam.ChannelsMask = RegionNvmGroup2->ChannelsDefaultMask;
+            #endif
             break;
         }
         case PHY_MAX_NB_CHANNELS:
@@ -389,7 +395,9 @@ PhyParam_t RegionAS923GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_CHANNELS:
         {
+            #if USE_NVM
             phyParam.Channels = RegionNvmGroup2->Channels;
+            #endif
             break;
         }
         case PHY_DEF_UPLINK_DWELL_TIME:

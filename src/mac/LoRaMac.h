@@ -74,11 +74,12 @@ extern "C"
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "timer.h"
-#include "systime.h"
+#include "../system/timer.h"
+#include "../system/systime.h"
 #include "LoRaMacTypes.h"
+#include "LoRaMacMessageTypes.h"
 
-#include "RegionNvm.h"
+#include "region/RegionNvm.h"
 #include "LoRaMacCryptoNvm.h"
 #include "secure-element-nvm.h"
 #include "LoRaMacClassBNvm.h"
@@ -2927,6 +2928,19 @@ LoRaMacStatus_t LoRaMacDeInitialization( void );
  * \details Resets the internal state machine to force the MAC to finalize a procedure.
  */
 void LoRaMacReset( void );
+
+/* VSPC 14.04.2026 */
+LoRaMacStatus_t DetermineFrameType( LoRaMacMessageData_t* macMsg, FType_t* fType );
+/*!
+ * \brief Decodes MAC commands in the fOpts field and in the payload
+ *
+ * \param [IN] payload      A pointer to the payload
+ * \param [IN] macIndex     The index of the payload where the MAC commands start
+ * \param [IN] commandsSize The size of the MAC commands
+ * \param [IN] snr          The SNR value  of the frame
+ * \param [IN] rxSlot       The RX slot where the frame was received
+ */
+void ProcessMacCommands( uint8_t* payload, uint8_t macIndex, uint8_t commandsSize, int8_t snr, LoRaMacRxSlot_t rxSlot );
 
 /*! \} defgroup LORAMAC */
 

@@ -30,7 +30,7 @@
  *
  * \author    Johannes Bruder ( STACKFORCE )
  */
-#include "utilities.h"
+#include "../boards/utilities.h"
 #include "region/Region.h"
 #include "LoRaMacClassB.h"
 #include "LoRaMacCrypto.h"
@@ -44,7 +44,7 @@
 #include "LoRaMacCommands.h"
 #include "LoRaMacAdr.h"
 #include "LoRaMacSerializer.h"
-#include "radio.h"
+#include "../radio/radio.h"
 
 #include "LoRaMac.h"
 
@@ -424,7 +424,7 @@ static bool ValidatePayloadLength( uint8_t lenN, int8_t datarate, uint8_t fOptsL
  * \param [IN] snr          The SNR value  of the frame
  * \param [IN] rxSlot       The RX slot where the frame was received
  */
-static void ProcessMacCommands( uint8_t* payload, uint8_t macIndex, uint8_t commandsSize, int8_t snr, LoRaMacRxSlot_t rxSlot );
+void ProcessMacCommands( uint8_t* payload, uint8_t macIndex, uint8_t commandsSize, int8_t snr, LoRaMacRxSlot_t rxSlot );
 
 /*!
  * \brief LoRaMAC layer generic send frame
@@ -2151,7 +2151,7 @@ static bool ValidatePayloadLength( uint8_t lenN, int8_t datarate, uint8_t fOptsL
     return false;
 }
 
-static void ProcessMacCommands( uint8_t *payload, uint8_t macIndex, uint8_t commandsSize, int8_t snr, LoRaMacRxSlot_t rxSlot )
+void ProcessMacCommands( uint8_t *payload, uint8_t macIndex, uint8_t commandsSize, int8_t snr, LoRaMacRxSlot_t rxSlot )
 {
     uint8_t status = 0;
     bool adrBlockFound = false;
@@ -4026,6 +4026,9 @@ LoRaMacStatus_t LoRaMacQueryTxPossible( uint8_t size, LoRaMacTxInfo_t* txInfo )
 
 LoRaMacStatus_t LoRaMacMibGetRequestConfirm( MibRequestConfirm_t* mibGet )
 {
+#if !USE_NVM
+    return LORAMAC_STATUS_ERROR;
+#else
     LoRaMacStatus_t status = LORAMAC_STATUS_OK;
     GetPhyParams_t getPhy;
     PhyParam_t phyParam;
@@ -4290,10 +4293,14 @@ LoRaMacStatus_t LoRaMacMibGetRequestConfirm( MibRequestConfirm_t* mibGet )
         }
     }
     return status;
+#endif // USE_NVM
 }
 
 LoRaMacStatus_t LoRaMacMibSetRequestConfirm( MibRequestConfirm_t* mibSet )
 {
+#if !USE_NVM
+    return LORAMAC_STATUS_ERROR;
+#else
     LoRaMacStatus_t status = LORAMAC_STATUS_OK;
     ChanMaskSetParams_t chanMaskSet;
     VerifyParams_t verify;
@@ -5036,6 +5043,7 @@ LoRaMacStatus_t LoRaMacMibSetRequestConfirm( MibRequestConfirm_t* mibSet )
         MacCtx.MacFlags.Bits.NvmHandle = 1;
     }
     return status;
+#endif // USE_NVM
 }
 
 LoRaMacStatus_t LoRaMacChannelAdd( uint8_t id, ChannelParams_t params )
