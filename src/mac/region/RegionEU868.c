@@ -28,7 +28,7 @@
  *
  * \author    Daniel Jaeckle ( STACKFORCE )
 */
-#include "radio.h"
+#include "../radio/radio.h"
 #include "RegionCommon.h"
 #include "RegionEU868.h"
 

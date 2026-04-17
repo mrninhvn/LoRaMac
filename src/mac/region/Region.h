@@ -64,6 +64,7 @@ extern "C"
 #include "../system/timer.h"
 #include "RegionCommon.h"
 
+#define REGION_EU868
 #define REGION_AS923
 #define USE_NVM         false
 
